@@ -25,7 +25,7 @@ services:
      network_mode: "bridge"
      volumes:
         - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
-        - ./wordpress/wp-content:/var/www/html/wp-content
+        - ./wp-content:/var/www/html/wp-content
      environment:
        WORDPRESS_DB_HOST: db:3306
        WORDPRESS_DB_USER: wordpress
