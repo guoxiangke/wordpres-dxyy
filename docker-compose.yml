@@ -1,0 +1,37 @@
+version: '3.3'
+
+services:
+   db:
+     image: mysql:latest
+     command: --default-authentication-plugin=mysql_native_password
+     volumes:
+       - db_data:/var/lib/mysql
+       - /tmp:/sql
+     restart: always
+     network_mode: "bridge"
+     environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+
+   wordpress:
+     links:
+       - db
+     image: wordpress:latest
+     ports:
+       - "80:80"
+     restart: always
+     network_mode: "bridge"
+     volumes:
+        - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+        - ./wordpress/wp-content:/var/www/html/wp-content
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: wordpress
+       WORDPRESS_DB_PASSWORD: wordpress
+       VIRTUAL_HOST: www.abc-chinaedu.com
+       LETSENCRYPT_HOST: www.abc-chinaedu.com
+       LETSENCRYPT_EMAIL: dale@139.com
+volumes:
+    db_data:
