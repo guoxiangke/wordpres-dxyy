@@ -54,7 +54,6 @@ $wp_super_cache_front_page_clear = 0;
 $wp_super_cache_front_page_check = 0;
 $wp_super_cache_front_page_notification = '0';
 
-$wp_cache_object_cache = 0;
 $wp_cache_anon_only = 0;
 $wp_supercache_cache_list = 0;
 $wp_cache_debug_to_file = 0;

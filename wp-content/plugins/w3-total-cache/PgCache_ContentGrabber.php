@@ -121,7 +121,7 @@ class PgCache_ContentGrabber {
 		$this->_config = Dispatcher::config();
 		$this->_debug = $this->_config->get_boolean( 'pgcache.debug' );
 
-		$request_host = Util_Environment::host();
+		$request_host = Util_Environment::host_port();
 		$this->_request_host = $request_host;
 
 		$this->_request_uri = $_SERVER['REQUEST_URI'];
@@ -1318,6 +1318,8 @@ class PgCache_ContentGrabber {
 		if ( $request_url ) {
 			$parts = parse_url( $request_url );
 			$key = $parts['host'] .
+
+				( isset( $parts['port'] ) ? ':' . $parts['port'] : '' ) .
 				( isset( $parts['path'] ) ? $parts['path'] : '' ) .
 				( isset( $parts['query'] ) ? '?' . $parts['query'] : '' );
 		} else {
@@ -1414,7 +1416,7 @@ class PgCache_ContentGrabber {
 					$page_key_extension['content_type'] : '';
 
 				if ( @preg_match( "~(text/xml|text/xsl|application/rdf\+xml|application/rss\+xml|application/atom\+xml)~i", $content_type ) ||
-					strpos( $request_url, "/feed/" ) !== false ||
+					preg_match( "~/feed(/|$)~", $request_url ) ||
 					strpos( $request_url, ".xsl" ) !== false ) {
 					$key_postfix = '.xml';
 				}
@@ -1901,11 +1903,6 @@ class PgCache_ContentGrabber {
 	 * @return array
 	 */
 	private function _maybe_save_cached_result( $buffer, $has_dynamic ) {
-		if ( empty( $buffer ) ) {
-			$this->cache_reject_reason = 'Empty response';
-			return $buffer;
-		}
-
 		$mobile_group = $this->_page_key_extension['useragent'];
 		$referrer_group = $this->_page_key_extension['referrer'];
 		$encryption = $this->_page_key_extension['encryption'];
@@ -1931,6 +1928,11 @@ class PgCache_ContentGrabber {
 
 		if ( !empty( $response_headers['kv']['Content-Encoding'] ) ) {
 			$this->cache_reject_reason = 'Response is compressed';
+			return $buffer;
+		}
+
+		if ( empty( $buffer ) && empty( $response_headers['kv']['Location'] ) ) {
+			$this->cache_reject_reason = 'Empty response';
 			return $buffer;
 		}
 

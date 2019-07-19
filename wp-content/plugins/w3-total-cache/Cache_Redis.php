@@ -178,8 +178,10 @@ class Cache_Redis extends Cache_Base {
 	 */
 	function flush( $group = '' ) {
 		$this->_get_key_version( $group );   // initialize $this->_key_version
-		$this->_key_version[$group]++;
-		$this->_set_key_version( $this->_key_version[$group], $group );
+		if (isset($this->_key_version[$group])) {
+			$this->_key_version[$group]++;
+			$this->_set_key_version( $this->_key_version[$group], $group );
+		}
 
 		return true;
 	}
@@ -343,6 +345,12 @@ class Cache_Redis extends Cache_Base {
 							null, null, $this->_instance_id . '_' . $this->_dbid );
 					else
 						$accessor->connect( trim( substr( $server, 5 ) ) );
+				} elseif ( strpos( $server, ':' ) === false ) {
+					if ( $this->_persistent )
+						$accessor->pconnect( trim( $server ),
+							null, null, $this->_instance_id . '_' . $this->_dbid );
+					else
+						$accessor->connect( trim( $server ) );
 				} else {
 					list( $ip, $port ) = explode( ':', $server );
 
