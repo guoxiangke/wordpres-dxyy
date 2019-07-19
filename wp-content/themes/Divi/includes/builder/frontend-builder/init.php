@@ -38,7 +38,7 @@ function et_fb_enabled() {
 		return false;
 	}
 
-	if ( ! is_admin() && ! is_single() && ! is_page() && ! et_builder_used_in_wc_shop() ) {
+	if ( ! is_admin() && ! is_single() && ! is_page() && ! et_builder_used_in_wc_shop() && ! isset( $_GET['is_new_page'] ) ) {
 		return false;
 	}
 

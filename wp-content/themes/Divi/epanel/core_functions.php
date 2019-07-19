@@ -136,7 +136,7 @@ function et_add_epanel() {
 		}
 	}
 
-	$core_page = add_theme_page( $themename . ' ' . esc_html__( 'Options', $themename ), $themename . ' ' . esc_html__( 'Theme Options', $themename ), 'switch_themes', basename( __FILE__ ), 'et_build_epanel' );
+	$core_page = add_theme_page( $themename . ' ' . esc_html__( 'Options', $themename ), $themename . ' ' . esc_html__( 'Theme Options', $themename ), 'edit_theme_options', basename( __FILE__ ), 'et_build_epanel' );
 
 	add_action( "admin_print_scripts-{$core_page}", 'et_epanel_admin_js' );
 	add_action( "admin_head-{$core_page}", 'et_epanel_css_admin' );
@@ -235,7 +235,19 @@ if ( ! function_exists( 'et_build_epanel' ) ) {
 								<div id="epanel-header">
 									<h1 id="epanel-title"><?php printf( esc_html__( '%s Theme Options', $themename ), esc_html( $themename ) ); ?></h1>
 									<a href="#" class="et-defaults-button epanel-reset" title="<?php esc_attr_e( 'Reset to Defaults', $themename ); ?>"><span class="label"><?php esc_html_e( 'Reset to Defaults', $themename ); ?></span></a>
-									<?php echo et_core_esc_previously( et_core_portability_link( 'epanel', array( 'class' => 'et-defaults-button epanel-portability' ) ) ); ?>
+									<?php
+									$portability_link = function_exists( 'et_builder_portability_link' )
+										? 'et_builder_portability_link'
+										: 'et_core_portability_link';
+
+									echo et_core_esc_previously(
+										call_user_func(
+											$portability_link,
+											'epanel',
+											array( 'class' => 'et-defaults-button epanel-portability' )
+										)
+									);
+									?>
 								</div>
 								<ul id="epanel-mainmenu">
 									<?php
@@ -728,7 +740,7 @@ if ( ! function_exists( 'epanel_save_data' ) ) {
 
 		et_core_nonce_verified_previously();
 
-		if ( ! current_user_can( 'switch_themes' ) ) {
+		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			die('-1');
 		}
 
@@ -754,6 +766,14 @@ if ( ! function_exists( 'epanel_save_data' ) ) {
 
 				if ( ! $updates_options = get_site_option( 'et_automatic_updates_options' ) ) {
 					$updates_options = get_option( 'et_automatic_updates_options', array() );
+				}
+
+				// Network Admins can edit options like Super Admins but content will be filtered
+				// (eg `>` in custom CSS would be encoded to `&gt;`) so we have to disable kses filtering
+				// while saving epanel options.
+				$skip_kses = ! current_user_can( 'unfiltered_html' );
+				if ( $skip_kses ) {
+					kses_remove_filters();
 				}
 
 				foreach ( $options as $value ) {
@@ -847,7 +867,7 @@ if ( ! function_exists( 'epanel_save_data' ) ) {
 										}
 									}
 								} else {
-									if ( current_user_can( 'switch_themes' ) ) {
+									if ( current_user_can( 'edit_theme_options' ) ) {
 										$et_option_new_value = stripslashes( $_POST[ $value['id'] ] );
 									} else {
 										$et_option_new_value = stripslashes( wp_filter_post_kses( addslashes( $_POST[ $value['id'] ] ) ) ); // wp_filter_post_kses() expects slashed value
@@ -927,6 +947,11 @@ if ( ! function_exists( 'epanel_save_data' ) ) {
 							}
 						}
 					}
+				}
+
+				if ( $skip_kses ) {
+					// Enable kses filters again
+					kses_init_filters();
 				}
 
 				$redirect_url = add_query_arg( 'saved', 'true', $redirect_url );

@@ -19,8 +19,6 @@ services:
      links:
        - db
      image: wordpress:latest
-     ports:
-       - "80:80"
      restart: always
      network_mode: "bridge"
      volumes:

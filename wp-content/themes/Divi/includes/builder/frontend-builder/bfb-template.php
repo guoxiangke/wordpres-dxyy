@@ -21,6 +21,17 @@
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
+<?php if ( ! is_single() || ! have_posts() ) { ?>
+	<article id="post-0">
+		<div id="page-container-bfb" class="entry-content">
+			<div id="et-boc" class="et-boc">
+				<div class="et_builder_inner_content">
+					<div id="et-fb-app"></div>
+				</div>
+			</div>
+		</div>
+	</article>
+<?php } ?>
 <?php while ( have_posts() ): the_post(); ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<div id="page-container-bfb" class="entry-content">

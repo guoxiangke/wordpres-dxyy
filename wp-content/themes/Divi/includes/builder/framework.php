@@ -4,7 +4,10 @@ require_once ET_BUILDER_DIR . 'core.php';
 require_once ET_BUILDER_DIR . 'feature/ClassicEditor.php';
 require_once ET_BUILDER_DIR . 'feature/post-content.php';
 require_once ET_BUILDER_DIR . 'feature/dynamic-content.php';
+require_once ET_BUILDER_DIR . 'feature/ErrorReport.php';
 require_once ET_BUILDER_DIR . 'api/DiviExtensions.php';
+require_once ET_BUILDER_DIR . 'feature/custom-defaults/Settings.php';
+require_once ET_BUILDER_DIR . 'feature/custom-defaults/History.php';
 
 if ( wp_doing_ajax() && ! is_customize_preview() ) {
 	define( 'WPE_HEARTBEAT_INTERVAL', et_builder_heartbeat_interval() );
@@ -46,6 +49,15 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_builder_resolve_post_content',
 			'et_builder_activate_bfb_auto_draft',
 			'et_builder_toggle_bfb',
+			'et_fb_error_report',
+			'et_core_portability_import',
+			'et_core_version_rollback',
+			'update-theme',
+			'et_core_portability_export',
+			'et_core_portability_import',
+			'et_builder_migrate_module_customizer_phase_two',
+			'et_builder_save_custom_defaults_history',
+			'et_builder_retrieve_custom_defaults_history',
 		),
 	);
 
@@ -538,8 +550,11 @@ add_filter( 'body_class', 'et_builder_body_classes' );
 
 if ( ! function_exists( 'et_builder_add_main_elements' ) ) :
 function et_builder_add_main_elements() {
-	require ET_BUILDER_DIR . 'main-structure-elements.php';
-	require ET_BUILDER_DIR . 'main-modules.php';
+	if ( ET_BUILDER_CACHE_MODULES ) {
+		ET_Builder_Element::init_cache();
+	}
+	require_once ET_BUILDER_DIR . 'main-structure-elements.php';
+	require_once ET_BUILDER_DIR . 'main-modules.php';
 	do_action( 'et_builder_ready' );
 }
 endif;
@@ -547,10 +562,10 @@ endif;
 if ( ! function_exists( 'et_builder_load_framework' ) ) :
 function et_builder_load_framework() {
 
-	require ET_BUILDER_DIR . 'functions.php';
-	require ET_BUILDER_DIR . 'compat/woocommerce.php';
-	require ET_BUILDER_DIR . 'class-et-global-settings.php';
-	require ET_BUILDER_DIR . 'feature/BlockEditorIntegration.php';
+	require_once ET_BUILDER_DIR . 'functions.php';
+	require_once ET_BUILDER_DIR . 'compat/woocommerce.php';
+	require_once ET_BUILDER_DIR . 'class-et-global-settings.php';
+	require_once ET_BUILDER_DIR . 'feature/BlockEditorIntegration.php';
 
 	if ( is_admin() ) {
 		global $pagenow, $et_current_memory_limit;
@@ -570,12 +585,12 @@ function et_builder_load_framework() {
 	$action_hook = apply_filters( 'et_builder_modules_load_hook', is_admin() ? 'wp_loaded' : 'wp' );
 
 	if ( et_builder_should_load_framework() ) {
-		require ET_BUILDER_DIR . 'class-et-builder-value.php';
-		require ET_BUILDER_DIR . 'class-et-builder-element.php';
-		require ET_BUILDER_DIR . 'class-et-builder-plugin-compat-base.php';
-		require ET_BUILDER_DIR . 'class-et-builder-plugin-compat-loader.php';
-		require ET_BUILDER_DIR . 'ab-testing.php';
-		require ET_BUILDER_DIR . 'class-et-builder-settings.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-value.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-element.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-plugin-compat-base.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-plugin-compat-loader.php';
+		require_once ET_BUILDER_DIR . 'ab-testing.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-settings.php';
 
 		$builder_settings_loaded = true;
 
@@ -584,9 +599,9 @@ function et_builder_load_framework() {
 		add_action( $action_hook, 'et_builder_init_global_settings', apply_filters( 'et_pb_load_global_settings_priority', 9 ) );
 		add_action( $action_hook, 'et_builder_add_main_elements', apply_filters( 'et_pb_load_main_elements_priority', 10 ) );
 	} else if ( is_admin() ) {
-		require ET_BUILDER_DIR . 'class-et-builder-plugin-compat-base.php';
-		require ET_BUILDER_DIR . 'class-et-builder-plugin-compat-loader.php';
-		require ET_BUILDER_DIR . 'class-et-builder-settings.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-plugin-compat-base.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-plugin-compat-loader.php';
+		require_once ET_BUILDER_DIR . 'class-et-builder-settings.php';
 		$builder_settings_loaded = true;
 	}
 

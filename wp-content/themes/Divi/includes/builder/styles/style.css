@@ -41,6 +41,7 @@
 	position: relative;
 	color: #32373c;
 	min-height: 250px;
+	line-height: 1.4em;
 }
 
 #et_pb_main_container a:active {
@@ -5862,6 +5863,10 @@ textarea#et_pb_custom_css:focus::-webkit-scrollbar-thumb,
 	text-align: center;
 	font-size: 14px;
 	min-height: 48px;
+}
+
+.et-pb-sortable-options--disabled li {
+	cursor: default;
 }
 
 .et-pb-column-layouts,

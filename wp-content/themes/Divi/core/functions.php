@@ -114,7 +114,7 @@ function et_core_die( $message = '' ) {
 		wp_send_json_error( array( 'error' => $message ) );
 	}
 
-	die(-1);
+	wp_die();
 }
 endif;
 
@@ -356,6 +356,13 @@ function et_core_is_fb_enabled() {
 }
 endif;
 
+if ( ! function_exists( 'et_core_is_saving_builder_modules_cache' ) ):
+function et_core_is_saving_builder_modules_cache() {
+	// This filter is set when Modules Cache is being saved.
+	return apply_filters( 'et_builder_modules_is_saving_cache', false );
+}
+endif;
+
 
 /**
  * Is Gutenberg active?
@@ -536,6 +543,43 @@ endif;
 // common.js needs to be loaded after waypoint, fitvid, & magnific js to avoid broken javascript on Facebook in-app browser, hence the 15 priority
 add_action( 'wp_enqueue_scripts', 'et_core_register_common_assets', 15 );
 
+if ( ! function_exists( 'et_core_noconflict_styles_gform' ) ) :
+/**
+ * Register Core styles with Gravity Forms so that they're enqueued when running on no-conflict mode
+ *
+ * @since 3.21.2
+ *
+ * @param $styles
+ *
+ * @return array
+ */
+function et_core_noconflict_styles_gform( $styles ) {
+	$styles[] = 'et-core-admin';
+
+	return $styles;
+}
+endif;
+add_filter( 'gform_noconflict_styles', 'et_core_noconflict_scripts_gform' );
+
+if ( ! function_exists( 'et_core_noconflict_scripts_gform' ) ) :
+/**
+ * Register Core scripts with Gravity Forms so that they're enqueued when running on no-conflict mode
+ *
+ * @since 3.21.2
+ *
+ * @param $scripts
+ *
+ * @return array
+ */
+function et_core_noconflict_scripts_gform( $scripts ) {
+	$scripts[] = 'et-core-admin';
+	$scripts[] = 'et-core-common';
+
+	return $scripts;
+}
+endif;
+add_filter( 'gform_noconflict_scripts', 'et_core_noconflict_scripts_gform' );
+
 if ( ! function_exists( 'et_core_security_check' ) ):
 /**
  * Check if current user can perform an action and/or verify a nonce value. die() if not authorized.
@@ -555,6 +599,10 @@ if ( ! function_exists( 'et_core_security_check' ) ):
  * @return bool|null Whether or not the checked passed if `$die` is `false`.
  */
 function et_core_security_check( $user_can = 'manage_options', $nonce_action = '', $nonce_key = '', $nonce_location = '_POST', $die = true ) {
+	$user_can     = (string) $user_can;
+	$nonce_action = (string) $nonce_action;
+	$nonce_key    = (string) $nonce_key;
+
 	if ( empty( $nonce_key ) && false === strpos( $nonce_action, '_nonce' ) ) {
 		$nonce_key = $nonce_action . '_nonce';
 	} else if ( empty( $nonce_key ) ) {
@@ -579,13 +627,24 @@ function et_core_security_check( $user_can = 'manage_options', $nonce_action = '
 
 	$passed = true;
 
-	if ( '' !== $nonce_action && ! isset( $nonce_location[ $nonce_key ] ) ) {
+	if ( is_numeric( $user_can ) ) {
+		// Numeric values are deprecated in current_user_can(). We do not accept them here.
 		$passed = false;
+
+	} else if ( '' !== $nonce_action && empty( $nonce_location[ $nonce_key ] ) ) {
+		// A nonce value is required when a nonce action is provided.
+		$passed = false;
+
 	} else if ( '' === $user_can && '' === $nonce_action ) {
+		// At least one of a capability OR a nonce action is required.
 		$passed = false;
+
 	} else if ( '' !== $user_can && ! current_user_can( $user_can ) ) {
+		// Capability check failed.
 		$passed = false;
-	} else if ( '' !== $nonce_action && ! empty( $nonce_location[ $nonce_key ] ) && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
+
+	} else if ( '' !== $nonce_action && ! wp_verify_nonce( $nonce_location[ $nonce_key ], $nonce_action ) ) {
+		// Nonce verification failed.
 		$passed = false;
 	}
 
@@ -686,6 +745,7 @@ function et_get_allowed_localization_html_elements() {
 		'span'   => array(),
 		'div'    => array(),
 		'strong' => array(),
+		'code'   => array(),
 	);
 
 	$elements = apply_filters( 'et_allowed_localization_html_elements', $elements );
@@ -811,6 +871,25 @@ function et_core_replace_enqueued_style( $old_src, $new_src, $regex = false ) {
 		// Enqueue the same handle with the new src.
 		wp_enqueue_style( $style_handle, $style_src, $style_deps, $style_ver, $style_media );
 	}
+}
+endif;
+
+if ( ! function_exists( 'et_core_is_safe_mode_active' ) ):
+/**
+ * Check whether the Support Center's Safe Mode is active
+ *
+ * @since ?.?
+ *
+ * @see ET_Core_Support_Center::toggle_safe_mode
+ *
+ * @return bool
+ */
+function et_core_is_safe_mode_active() {
+	$is_safe_mode_active = false;
+	if ( 'on' === get_user_meta( get_current_user_id(), '_et_support_center_safe_mode', true ) ) {
+		$is_safe_mode_active = true;
+	};
+	return $is_safe_mode_active;
 }
 endif;
 

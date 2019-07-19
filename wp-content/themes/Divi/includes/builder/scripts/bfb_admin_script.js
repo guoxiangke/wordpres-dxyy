@@ -129,7 +129,7 @@
 			return;
 		} else {
 			$use_builder_custom_field.val('on');
-			
+
 			if ('' !== content) {
 				// Save content as old content on post meta
 				$et_pb_old_content.val(content);

@@ -7,15 +7,15 @@ See wp-cache.php for author details.
 
 $wp_cache_mobile_groups = '';
 $cache_page_secret = '2ca8c793321eb6074e0663f4d084c57c';
-$wp_cache_home_path = '/';
+$wp_cache_home_path = 'www.abc-chinaedu.com/';
 $wp_cache_slash_check = 0;
 $cache_time_interval = 600;
 if ( ! defined('WPCACHEHOME') )
 	define( 'WPCACHEHOME', WP_CONTENT_DIR . "/plugins/wp-super-cache/" );
 
 $cache_compression = 0; // Super cache compression
-$cache_enabled = true;
-$super_cache_enabled = true;
+$cache_enabled = false;
+$super_cache_enabled = false;
 $cache_max_time = 1800;
 //$use_flock = true; // Set it true or false if you know what to use
 $cache_path = WP_CONTENT_DIR . '/cache/';
@@ -28,7 +28,7 @@ $cache_acceptable_files = array( 'wp-comments-popup.php', 'wp-links-opml.php', '
 $cache_rejected_uri = array('wp-.*\\.php', 'index\\.php');
 $cache_rejected_user_agent = array ( 0 => 'bot', 1 => 'ia_archive', 2 => 'slurp', 3 => 'crawl', 4 => 'spider', 5 => 'Yandex' );
 
-$cache_rebuild_files = 1;
+$cache_rebuild_files = 0;
 
 // Disable the file locking system.
 // If you are experiencing problems with clearing or creating cache files

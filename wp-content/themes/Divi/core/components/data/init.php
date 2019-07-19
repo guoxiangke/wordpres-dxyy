@@ -246,3 +246,23 @@ function et_core_fix_unclosed_html_tags( $content ) {
 	return $content;
 }
 endif;
+
+
+/**
+ * Converts string to UTF-8 if mb_convert_encoding function exists
+ *
+ * @since 3.19.17
+ *
+ * @param string $string source string
+ *
+ * @return string
+ */
+if ( ! function_exists( 'et_core_maybe_convert_to_utf_8' ) ):
+function et_core_maybe_convert_to_utf_8( $string ) {
+	if ( function_exists( 'mb_convert_encoding' ) ) {
+		return mb_convert_encoding( $string, 'UTF-8' );
+	}
+
+	return $string;
+}
+endif;

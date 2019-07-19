@@ -249,6 +249,19 @@ body.rtl .et-bfb-optin-cta__button {
 }
 
 /**
+ * Compatibility:
+ * - LearnPress (https://wordpress.org/plugins/learnpress/)
+ */
+.et_pb_post_body_hidden > *:not(#learn-press-admin-editor-metabox-settings):not(.lp-admin-editor) {
+  display: none;
+}
+
+#learn-press-admin-editor-metabox-settings {
+  /* Add spacing to avoid preview mode buttons overlapping with LearnPress faux meta boxes. */
+  margin-bottom: 40px;
+}
+
+/**
  * Copying basic BFB metabox styling and its handle from bfb-style.scss to avoid flash of
  * unstyled metabox when the page is loaded
  * this styles where declared on functions as inline styles
@@ -294,6 +307,10 @@ body.rtl .et-bfb-optin-cta__button {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
+}
+
+body.post-type-view-template #et_pb_layout {
+  margin-top: 50px !important;
 }
 
 label[for="et_pb_layout-hide"] {

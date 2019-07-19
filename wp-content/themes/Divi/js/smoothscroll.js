@@ -365,7 +365,7 @@ function keydown(event) {
             y = clientHeight * 0.9;
             break;
         case key.home:
-            y = -elem.scrollTop;
+            y = -window.pageYOffset;
             break;
         case key.end:
             var damt = elem.scrollHeight - elem.scrollTop - clientHeight;
@@ -537,7 +537,7 @@ else if ("onmousewheel" in document.createElement("div"))
 var isSmoothScrollActive = document.body.className.split(' ').filter( function( className ) { return className === 'et_smooth_scroll' } ).length > 0;
 
 if (wheelEvent && isChrome && isSmoothScrollActive) {
-	addEvent(wheelEvent, wheel);
+	window.addEventListener(wheelEvent, wheel, { passive: false });
 	addEvent("mousedown", mousedown);
 	addEvent("load", init);
 }

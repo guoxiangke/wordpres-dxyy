@@ -990,9 +990,17 @@ class ET_Builder_Library {
 			'data'    => $result,
 		) );
 
-		$tmp_file = tempnam( '/tmp', 'et' );
+		$tmp_dir = function_exists( 'sys_get_temp_dir' ) ? sys_get_temp_dir() : '/tmp';
+
+		$tmp_file = tempnam( $tmp_dir, 'et' );
 
 		@file_put_contents( $tmp_file, $response );
+
+		// Remove any previous buffered content since we're setting `Content-Length` header
+		// based on $response value only.
+		while ( ob_get_level() ) {
+			ob_end_clean();
+		}
 
 		header( 'Content-Length: ' . @filesize( $tmp_file ) );
 

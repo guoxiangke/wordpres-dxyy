@@ -1856,7 +1856,7 @@ Copyright (c) 2015 Daniel Eden
   display: none;
 }
 
-#epanel .CodeMirror.cm-s-et {
+.CodeMirror.cm-s-et {
 	/*
 		Based on CodeMirror Material Theme
 
@@ -1866,85 +1866,85 @@ Copyright (c) 2015 Daniel Eden
 	background-color: #4C5866;
 	color: #ffffff;
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-gutters {
+.CodeMirror.cm-s-et .CodeMirror-gutters {
 	background: #4C5866;
 	color: #537f7e;
 	border: none;
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-guttermarker, #epanel .CodeMirror.cm-s-et .CodeMirror-guttermarker-subtle, #epanel .CodeMirror.cm-s-et .CodeMirror-linenumber {
+.CodeMirror.cm-s-et .CodeMirror-guttermarker, .CodeMirror.cm-s-et .CodeMirror-guttermarker-subtle, .CodeMirror.cm-s-et .CodeMirror-linenumber {
 	color: #8393a5;
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-cursor {
+.CodeMirror.cm-s-et .CodeMirror-cursor {
 	border-left: 1px solid #fff;
 }
-#epanel .CodeMirror.cm-s-et div.CodeMirror-selected {
+.CodeMirror.cm-s-et div.CodeMirror-selected {
 	background: rgba(145, 203, 255, 0.2);
 }
-#epanel .CodeMirror.cm-s-et .cm-s-material.CodeMirror-focused div.CodeMirror-selected {
+.CodeMirror.cm-s-et .cm-s-material.CodeMirror-focused div.CodeMirror-selected {
 	background: rgba(0, 0, 0, 0.1);
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-line::selection, #epanel .CodeMirror.cm-s-et .CodeMirror-line > span::selection, #epanel .CodeMirror.cm-s-et .CodeMirror-line > span > span::selection {
+.CodeMirror.cm-s-et .CodeMirror-line::selection, .CodeMirror.cm-s-et .CodeMirror-line > span::selection, .CodeMirror.cm-s-et .CodeMirror-line > span > span::selection {
 	background: rgba(0, 0, 0, 0.1);
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-line::-moz-selection, #epanel .CodeMirror.cm-s-et .CodeMirror-line > span::-moz-selection, #epanel .CodeMirror.cm-s-et .CodeMirror-line > span > span::-moz-selection {
+.CodeMirror.cm-s-et .CodeMirror-line::-moz-selection, .CodeMirror.cm-s-et .CodeMirror-line > span::-moz-selection, .CodeMirror.cm-s-et .CodeMirror-line > span > span::-moz-selection {
 	background: rgba(0, 0, 0, 0.1);
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-activeline-background {
+.CodeMirror.cm-s-et .CodeMirror-activeline-background {
 	background: rgba(0, 0, 0, 0.1);
 }
-#epanel .CodeMirror.cm-s-et .cm-keyword {
+.CodeMirror.cm-s-et .cm-keyword {
 	color: #88c2f8;
 }
-#epanel .CodeMirror.cm-s-et .cm-operator {
+.CodeMirror.cm-s-et .cm-operator {
 	color: #ffffff;
 }
-#epanel .CodeMirror.cm-s-et .cm-variable-2,
-#epanel .CodeMirror.cm-s-et .cm-string-2,
-#epanel .CodeMirror.cm-s-et .cm-meta {
+.CodeMirror.cm-s-et .cm-variable-2,
+.CodeMirror.cm-s-et .cm-string-2,
+.CodeMirror.cm-s-et .cm-meta {
 	color: #fff;
 }
-#epanel .CodeMirror.cm-s-et .cm-variable-3, #epanel .CodeMirror.cm-s-et .cm-type {
+.CodeMirror.cm-s-et .cm-variable-3, .CodeMirror.cm-s-et .cm-type {
 	color: #88c2f8;
 }
-#epanel .CodeMirror.cm-s-et .cm-builtin,
-#epanel .CodeMirror.cm-s-et .cm-qualifier,
-#epanel .CodeMirror.cm-s-et .cm-variable-3,
-#epanel .CodeMirror.cm-s-et .cm-type {
+.CodeMirror.cm-s-et .cm-builtin,
+.CodeMirror.cm-s-et .cm-qualifier,
+.CodeMirror.cm-s-et .cm-variable-3,
+.CodeMirror.cm-s-et .cm-type {
 	color: #fe9c47;
 }
-#epanel .CodeMirror.cm-s-et .cm-atom {
+.CodeMirror.cm-s-et .cm-atom {
 	color: #88c2f8;
 }
-#epanel .CodeMirror.cm-s-et .cm-number {
+.CodeMirror.cm-s-et .cm-number {
 	color: #fe9c47;
 }
-#epanel .CodeMirror.cm-s-et .cm-def {
+.CodeMirror.cm-s-et .cm-def {
 	color: #ffffff;
 }
-#epanel .CodeMirror.cm-s-et .cm-string {
+.CodeMirror.cm-s-et .cm-string {
 	color: #fe9c47;
 }
-#epanel .CodeMirror.cm-s-et .cm-comment {
+.CodeMirror.cm-s-et .cm-comment {
 	color: #8393a5;
 }
-#epanel .CodeMirror.cm-s-et .cm-variable {
+.CodeMirror.cm-s-et .cm-variable {
 	color: #88c2f8;
 }
-#epanel .CodeMirror.cm-s-et .cm-attribute {
+.CodeMirror.cm-s-et .cm-attribute {
 	color: #88c2f8;
 }
-#epanel .CodeMirror.cm-s-et .cm-property {
+.CodeMirror.cm-s-et .cm-property {
 	color: #88dfbe;
 }
-#epanel .CodeMirror.cm-s-et .cm-tag {
+.CodeMirror.cm-s-et .cm-tag {
 	color: #88dfbe;
 }
-#epanel .CodeMirror.cm-s-et .cm-searching {
+.CodeMirror.cm-s-et .cm-searching {
 	background: none;
 	border-bottom: 1px solid white;
 	color: white;
 }
-#epanel .CodeMirror.cm-s-et .CodeMirror-matchingbracket {
+.CodeMirror.cm-s-et .CodeMirror-matchingbracket {
 	text-decoration: underline;
 	color: white !important;
 }
